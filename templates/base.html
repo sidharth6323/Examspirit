@@ -1,0 +1,191 @@
+<html>
+{% load staticfiles %}
+<head>
+<script src="{% static 'js/angular.js' %}"></script>
+<script src="{% static 'js/jquery-2.0.3.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap.js' %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" >
+<title>
+	{%block title %}ExamSpirit{%endblock%}
+</title>
+<style>
+  html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+    height: 100%;
+}
+
+	.top_bt
+	{
+		transition:0.5s;
+	}
+	.top_bt:hover
+	{
+		background-color: #21568c;
+    border-bottom: 1px solid #235b93;
+		transition: 0.5s;
+	}
+  .bot_bt
+  {
+    transition:0.5s;
+  }
+  .bot_bt:hover
+  {
+    background-color: #cccccc;
+    transition: 0.5s;
+  }
+
+</style>
+
+</head>
+<body>
+<nav class="navbar navbar-default" style="height:90px;background:#205081;color:#ffffff;">
+  <div class="container-fluid">
+    <div class="navbar-header">
+    	<br>
+      <a class="navbar-brand" href="/" style="color:#ffffff;font-size:25px;margin-left:5px;">  <span style="font-weight:lighter;">EXAM</span> <b>SPIRIT</b></a>
+    </div>
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav navbar-right">
+        <li class="top_bt" style="height:50%;"><a href="/contact/" style="color:#ffffff">FOR PARTNERS	</a></li>
+        {% if not user.is_authenticated %}
+        <li class="top_bt" style="height:50%;"><a href="#" style="color:#ffffff" data-toggle="modal" data-target="#signinModal">LOGIN</a></li>
+        <li class="top_bt" style="height:50%;"><a href="#" style="color:#ffffff" data-toggle="modal" data-target="#signupModal">SIGNUP</a></li>
+        {% else %}
+        <li class="top_bt" style="height:50%;"><a href="#" style="color:#ffffff">TESTS</a></li>
+        <li class="top_bt" style="height:50%;"><a href="#" style="color:#ffffff">NEWS</a></li>
+        <li class="top_bt" style="height:50%;"><a href="#" style="color:#ffffff">BLOG</a></li>
+        <li class="top_bt" style="height:50%;"><a href="#" style="color:#ffffff">NOTIFICATIONS</a></li>
+        <li class="top_bt" style="height:50%;"><a href="/logout/" style="color:#ffffff">LOGOUT ({{user.username|upper}})</a></li>
+        {% endif %}
+      </ul>
+      <br><br>
+      <div style="margin-left:1100px;margin-top:10px ;opacity:0.9">
+      <span>connect on : </span>
+      {% include 'social.html' %}
+      </div>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+{%block content%}{%endblock%}
+
+<!-- Modal signin -->
+<div class="modal fade" id="signinModal" tabindex="-1">
+  <div class="modal-dialog" style="width:450px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3 class="modal-title" id="myModalLabel" align="center">Log In</h3>
+      </div>
+      <div class="modal-body" style="padding-left:30px;">
+      <br>
+      <form action="/signin/" method="POST">
+          {%csrf_token%}
+      <div class="input-group" style="width:90%;height:45px;">
+        <span class="input-group-addon" id="basic-addon1">Username</span>
+          <input required="required" type="text" class="form-control" style="height:45px" placeholder="Enter Username" aria-describedby="basic-addon1" name="username">
+      </div>
+      <br>
+      <div class="input-group" style="width:90%;height:45px;">
+        <span class="input-group-addon" id="basic-addon1">Password&nbsp</span>
+          <input required="required" type="password" class="form-control" style="height:45px" placeholder="Enter password" aria-describedby="basic-addon1" name="password">
+      </div>
+      <br>
+        <input type="submit" class="btn btn-primary" value="Log In" style="margin-left:300px;">
+      </form>
+      </div>
+      <div class="modal-footer">
+        <large>Not having an account? </large>
+        <span style="font-size:16px;"><a href="#" data-toggle="modal" data-target="#signupModal" data-dismiss="modal">Sign Up</a></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+	<!-- Modal signup -->
+<div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog"  style="width:450px;" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3 class="modal-title" id="myModalLabel" align="center">Sign Up</h3>
+      </div>
+      <div class="modal-body" style="padding-left:30px;">
+      
+      <medium style="padding-left:130px;font-weight:5px;">Enter the Credentials</medium>
+      <br><br>
+
+      <form action="/signup/" method="POST">
+      		{%csrf_token%}
+	      <div class="input-group" style="width:90%">
+			  <span class="input-group-addon" id="basic-addon1">Username</span>
+	  		  <input required="required" type="text" class="form-control" placeholder="Enter Username" aria-describedby="basic-addon1" name="username">
+		  </div>
+		  <br>
+		  <div class="input-group" style="width:90%">
+			  <span class="input-group-addon" id="basic-addon1">Password&nbsp</span>
+	  		  <input type="password" required="required" class="form-control" placeholder="Enter password" aria-describedby="basic-addon1" name="password">
+		  </div>
+		  <br>
+		  <div class="input-group" style="width:90%">
+			  <span class="input-group-addon" id="basic-addon1">Name&nbsp&nbsp&nbsp&nbsp&nbsp
+			  &nbsp</span>
+	  		  <input type="text" class="form-control" required="required" placeholder="Enter Full Name" aria-describedby="basic-addon1" name="f_name">
+		  </div>
+          <br>
+		  <div class="input-group" style="width:90%">
+			  <span class="input-group-addon" id="basic-addon1">Email&nbsp&nbsp&nbsp&nbsp&nbsp
+			  &nbsp&nbsp</span>
+	  		  <input type="email" class="form-control" required="required" placeholder="Enter Email" aria-describedby="basic-addon1" name="email">
+		  </div>
+          <br>
+		  <div class="input-group" style="width:90%">
+			  <span class="input-group-addon" id="basic-addon1">Phone&nbsp&nbsp&nbsp&nbsp&nbsp
+			  &nbsp</span>
+	  		  <input type="number" class="form-control" placeholder="Enter Your Number" aria-describedby="basic-addon1" required="required" name="mobile">
+		  </div>
+          <br>
+		  <div class="input-group" style="
+		  width:90%">
+			  <span class="input-group-addon" id="basic-addon1">DOB&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+			  </span>
+	  		  <input type="date" class="form-control" placeholder="Enter DOB(YYYY-MM-DD)" aria-describedby="basic-addon1" required="required" name="dob">
+		  </div>
+		  <br>
+		  <div class="input-group" style="width:90%">
+		  	<span class="input-group-addon" id="basic-addon1">EXAM&nbsp&nbsp&nbsp&nbsp
+			  &nbsp&nbsp&nbsp</span>
+  				<select class="form-control" id="sel1" name="test">
+				    {% for i in tests %}
+				    <option>{{i}}</option>
+				    {%endfor%}
+			  	</select>
+		  </div>
+		  <br>
+		  <input type="submit" value="Sign Up" class="btn btn-primary" style="margin-left:300px;">
+		  </form>
+      </div>
+      <div class="modal-footer" data-dismiss="modal" style="margin-top:-10px">
+        <large>Having an account? </large>
+        <span style="font-size:16px;"><a href="#" data-toggle="modal" data-target="#signinModal">Log in</a></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="navbar0" style="border-top:#cccccc 1px solid;background:#f5f5f5;">
+  <div class="container" style="border-top:#cccccc 1px solid;background:#f5f5f5;">
+    <span class="navbar-text">
+      <ul class="nav navbar-nav">
+        <li class="bot_bt"><a href="/" style="color:#787878">HOME  </a></li>
+        <li class="bot_bt"><a href="/contact/" style="color:#787878">CONTACT US  </a></li>
+        <li class="bot_bt"><a href="#" style="color:#787878">NEWS EVENTS  </a></li>
+        <li class="bot_bt"><a href="/mission/" style="color:#787878">MISSION  </a></li>
+        <li class="bot_bt"><a href="/contact/" style="color:#787878">FOR PARTNERS  </a></li>
+      </ul>
+    </span>
+  </div>
+</div>
+
+</body></html>

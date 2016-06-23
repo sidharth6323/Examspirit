@@ -1,0 +1,438 @@
+<html>
+{%extends 'base.html' %}
+{%load staticfiles %}
+{% load app_filters %}
+{%block content %}
+  
+  <link rel="stylesheet" type="text/css" href="{% static 'css/demo.css' %}">
+  <script type="text/javascript" src="{% static 'js/kinetic.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.final-countdown.js' %}"></script>
+<style>
+.bubble
+{
+	margin-left:1px;
+	margin-bottom:10px;
+	height:30px;
+	width:30px;
+	background:rgba(247, 131, 148, 0.3);
+	display:inline-block;
+	color:#595858;
+	transition: 0.3s;
+	cursor:pointer;
+	border-radius:10px;
+}
+.bubble:hover
+{
+	background:#eaeaea;
+}
+#ques
+{
+		background-color: #f8f8f8;
+		width:95%;
+		margin-left:15px;
+}
+#sidebar
+{   
+    width: 89%;
+    background-color: #F8F8F8;
+    position: relative;
+    margin-top: -5px;
+    height: 100%;
+    border-right: 1px solid #cecece;
+    border-top: 1px solid #cecece;
+}
+.sideul {
+	width:100%;
+	margin-left: -20px;
+    list-style-type: none;
+    transition: 0.3s;
+}
+
+.sideli a {
+    display: block;
+    color: #000;
+    padding: 8px 0px 8px 10px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.sideli a.active {
+    background-color: #4CAF50;
+    color: white;
+    transition: 0.3s;
+}
+
+.sideli a:hover:not(.active) {
+    background-color: #EDEDED;
+    color: black;
+    transition: 0.3s;
+}
+</style>
+<div  ng-app="myApp" ng-controller="newCtrl">
+
+<div class="row" style="margin-top:-15px;" >
+{% if paper_l.sections.all %}
+<div class="col-sm-2" style="height:300%;margin-right:-3.5%">
+<div id="sidebar">
+<br>
+<span style="font-size:18px;margin-left:30px;border-bottom:1px solid #cecece;">Sections</span>
+<br><br>
+<ul class="sideul">
+{% for i in paper_l.sections.all %}
+  <li style="cursor:pointer;" class="sideli" ng-click="show_sec('{{i}}')"><a>{{i}}</a></li>
+{%endfor%}
+</ul>
+</div>
+</div>
+{% endif %}
+
+
+<div {% if not paper_l.sections.all %} class="col-sm-9"{%else%} class="col-sm-7" {% endif %} >
+<div class="paper" style="background:#ffffff; width:108%;" id="paper">
+	<div class="header">
+		<div class="row">
+			<div class="col-sm-10">
+				<br>
+				<span style="font-size:20px;padding-left:44%">{{user_m.test}} : {{paper_l.p_name|upper}}
+				</span>
+				<br>	
+			</div>
+			
+		</div>
+	</div>
+		<br><br>
+
+	
+	{% for sec,value in final_q.items reversed %}
+<div class="section{{forloop.counter}}">
+		
+		{% with a=1 %}
+		{% for t in value %}
+			<div class="5ques"{%if forloop.first %} id="{{sec}}" {%endif%} ng-show="toggle_div('{{iterator.next}}')" data-title="{{iterator2.next}}">
+					
+				<div class="section" id="{{sec}}" align="center" style="background-color:#f8f8f8;width:95%;margin-left:13px;">
+			{% if paper_l.sections.all %}
+							<br>{{sec}}<br><br>
+			{%endif%}
+		</div>
+		
+			{% for p in t %}
+			{% if not forloop.first %}
+			{% for i,j in p.items %}
+			
+			<br>
+			<div id="ul{{j.4}}" data-title="{{j.5}}">
+			<ul style="list-style-type:none;border:1px solid #afafaf;" id="ques">
+			<br>
+				<span>Q {{j.4|safe}})  {{i|safe}}<br></span>
+				<li>
+					<fieldset id="q{{j.4}}">
+						<div class="row" style="padding-left:30px;">
+						<div class="col-sm-12">
+							<div class="radio">
+							<label><input ng-click="m_bubble({{j.4}})" type="radio" name="{{j.4}}" id="check{{j.4}}1">{{j.0 |wrap_me:"75"|safe}}</label>
+							</div>
+							<div class="radio">
+							<label><input ng-click="m_bubble({{j.4}})" type="radio" id="check{{j.4}}2" name="{{j.4}}">{{j.1 |wrap_me:"75"|safe}}</label>
+							</div>
+							<div class="radio">
+							<label><input ng-click="m_bubble({{j.4}})" type="radio" name="{{j.4}}" id="check{{j.4}}3">{{j.2|wrap_me:"75"|safe}}</label>
+							</div>
+							<div class="radio">
+							<label><input ng-click="m_bubble({{j.4}})" type="radio" name="{{j.4}}" id="check{{j.4}}4">{{j.3|wordwrap:"75"|safe}}</label>
+							</div>
+						</div>
+						</div>
+
+					</fieldset>
+
+				</li>
+					<br>
+					<button class="btn btn-default" style="margin-left:600px;" ng-click="skip({{j.4}})">Skip</button><br><br>
+			</ul>
+			</div>
+			<br>
+
+			{%endfor%}
+			{%endif%}
+			{%endfor%}
+
+		</div>
+		{%endfor%}
+</div>
+{%endwith%}
+{%endfor%}
+	
+		
+		
+		
+
+              <br>
+             <div class="text-center">
+          <nav>
+
+    <button ng-click="previous_p()" class="btn btn-primary" style="margin-right:30px;"><< Previous</button>
+  <ul class="pagination">
+    <li>
+      <a href="#" ng-click="previous_p()" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    {% for i in nop %}
+    <li><a href="#" ng-click="show_p('{{forloop.counter}}')">{{forloop.counter}}</a></li>
+    {% endfor %}
+    <li>
+      <a href="#" ng-click="next_p()" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+    <button ng-click="next_p()" class="btn btn-primary" style="margin-left:30px;">NEXT >> </button>
+  </ul>
+</nav>
+          </div>
+	<br><br><br><br><br><br><br><br><br><br>
+</div>
+</div>
+<div class="col-sm-3" style="padding-right:0.5%;" >
+<div class="rightbar" style="background-color:#F8F8F8;height:300%;margin-top:-1%;margin-left:12%;border: 1px solid #cecece;padding-top:10px;width:100%">
+
+<br><span style="font-size:20px;margin-left:120px;">Time left :</span>
+	<div style="margin-top:13%;margin-left:-92%;width:100px;height:100px;">
+	{% include 'timer.html' %}
+	</div>
+<br>
+<span style="font-size:18px;margin-left:20px;">Test summary :</span><br>
+<small style="margin-left:20px;color:#adadad;">(click to navigate)</small><br>
+<small style="margin-left:20px;color:#adadad;">
+	<div style="display:inline-block;background:rgba(247, 131, 148, 0.3);width:13px;margin-top:10px;height:13px;margin-right:75px;"><p style="margin-left:15px;margin-top:-2px;">unanswered</p>
+	</div>
+	<div style="display:inline-block;background:rgba(105, 198, 122, 0.3);width:13px;margin-top:10px;height:13px;margin-right:60px;"><p style="margin-left:15px;margin-top:-2px;">answered</p>
+	</div>
+	<div style="display:inline-block;background:rgba(112, 115, 173, 0.3);width:13px;margin-top:10px;height:13px;"><p style="margin-left:15px;margin-top:-2px;">skipped</p>
+	</div>
+</small><br><br>	
+<div class="bubbles" style="margin-left:20px;">
+{% for i in noq %}
+
+<div class="bubble" id="bubble{{i}}" onclick="scrollto({{i}})" ng-click="show_p_b({{i}}/5+1)"><p align="center" style="margin-top:4px;"><b>{{i}}</b></p></div>
+
+{%endfor%}
+</div>
+<br><br><br>
+<button class="btn btn-primary" onclick="finish_t()" style="height:40px;width:130px;margin-left:100px;">FINISH TEST</button>
+<br>
+</div>
+</div>
+</div>
+
+
+
+
+<div class="modal fade" id="t_finishModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">TIME OVER!!!</h4>
+      </div>
+      <div class="modal-body">
+        <p>Time Over.</p>
+        Test Summary
+        <br>
+        Answered:{$answered$},Unanswered:{$unanswered$},Skipped:{$skipped$}
+      </div>
+      <div class="modal-footer">
+        <button type="button" ng-click="post_res()" class="btn btn-primary">Continue</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<div class="modal fade" id="finishModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Are you sure you want to Finish the Test?</h4>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:17px;">Time Left : <span id="f_hours"></span> hours <span id="f_minutes"></span> minutes <span id="f_seconds"></span> seconds</p>
+        <p style="font-size:18px;">Test Summary</p>
+        <span style="font-size:17px;">Answered:{$answered$},Unanswered:{$unanswered$},Skipped:{$skipped$}</span>
+      </div>
+      <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" ng-click="post_res()">Continue</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+</div><!-- end of angular -->
+</div>
+<script>
+	var app=angular.module('myApp',[]);
+	app.controller('newCtrl',function($scope,$http) {
+			$scope.answered=0;
+			$scope.unanswered={{noq|length}};
+			$scope.skipped=0;
+			$scope.active_p=1;
+			$scope.count=0;
+			$scope.toggle_div=function(page)
+			{
+				if(page==$scope.active_p)
+					return 1;
+				else
+					return 0;
+			}
+			$scope.show_p_b=function(page)
+			{
+				if(page!=Math.floor(page))
+				{
+					page=Math.floor(page);
+				}
+				else
+					page=page-1;
+				$scope.active_p=page;
+			}
+			$scope.show_p=function(page)
+			{
+				$scope.active_p=page;
+			}
+			$scope.next_p=function()
+			{
+				if($scope.active_p<{{nop|length}})
+				{
+					$scope.active_p=parseInt($scope.active_p)+1;
+				}
+			}
+			$scope.previous_p=function()
+			{
+				if($scope.active_p>1)
+				{
+				$scope.active_p=$scope.active_p-1;
+				}
+			}
+			$scope.m_bubble=function(ques)
+			{
+				var bubble = document.getElementById('bubble'+ques);
+				if(bubble.style.background=='rgba(112, 115, 173, 0.298039)')
+				{
+					$scope.skipped=$scope.skipped-1;
+				}
+				bubble.style.background = 'rgba(105, 198, 122, 0.3)';
+				$scope.answered=$scope.answered+1;
+				$scope.unanswered=$scope.unanswered-1;
+				console.log(bubble.style.background);
+			}
+			$scope.skip=function(ques)
+			{
+				var bubble = document.getElementById('bubble'+ques);
+				bubble.style.background = 'rgba(112, 115, 173, 0.3)';
+				if(document.getElementById('check'+ques+'1').checked==true || document.getElementById('check'+ques+'2').checked==true || document.getElementById('check'+ques+'3').checked==true || document.getElementById('check'+ques+'4').checked==true)
+				{
+					$scope.answered=$scope.answered-1;
+				}
+				else
+				{
+					$scope.unanswered=$scope.unanswered-1;
+				}
+				document.getElementById('check'+ques+'1').checked = false;
+				document.getElementById('check'+ques+'2').checked = false;
+				document.getElementById('check'+ques+'3').checked = false;
+				document.getElementById('check'+ques+'4').checked = false;
+				$scope.skipped=$scope.skipped+1;
+			}
+			$scope.show_sec=function(sec)
+			{
+				var div=document.getElementById(sec);
+				console.log(div.getAttribute("data-title"))
+				$scope.active_p=div.getAttribute("data-title");
+			}
+			$scope.post_res=function()
+			{
+				var a={};
+				var ans;
+				for(var i=1;i<={{noq|length}};i++)
+				{
+						var q=document.getElementById("ul"+i);
+						var c1=document.getElementById("check"+i+"1");
+						var c2=document.getElementById("check"+i+"2");
+						var c3=document.getElementById("check"+i+"3");
+						var c4=document.getElementById("check"+i+"4");
+						if(c1.checked)
+								ans=c1.id;
+						else if(c2.checked)
+							ans=c2.id;
+						else if(c3.checked)
+							ans=c3.id;
+						else if(c4.checked)
+							ans=c4.id;
+						else
+							ans="none"
+						
+						a[q.getAttribute("data-title")]=ans;
+							
+				}
+				console.log(a);
+				$http({
+				    method: 'POST',
+				    url: '/generate_result/',
+				    data: {
+				    		p_id:"{{paper_l.p_id}}",
+				        	ans:a,
+				             csrfmiddlewaretoken: '{{ csrf_token }}',
+				        },
+				    headers: {'Content-Type': 'application/json'}
+				});
+				window.location="/finish_t/";
+
+			}
+		}
+	);
+var my_app = angular.module('myApp').config(function($interpolateProvider) {
+    $interpolateProvider.startSymbol('{$');
+    $interpolateProvider.endSymbol('$}');
+});
+
+app.config(['$httpProvider', function($httpProvider) {
+    $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+    $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+}]);
+
+</script>
+<script type="text/javascript">  
+    $('document').ready(function() {
+        'use strict';
+        
+    	$('.countdown').final_countdown({
+            'start': 0,
+            'end': 140+{{duration.seconds}},
+            'now': 140        
+        }, function() {
+        		document.getElementById("paper").style.visibility="hidden";
+        		
+        		$('#t_finishModal').modal({backdrop: 'static', keyboard: false});
+                
+        });
+
+    });
+    function scrollto(id){
+    	$("html, body").delay(100).animate({
+        scrollTop: $("#ul"+id).offset().top 
+    }, 700);
+    }
+    function finish_t()
+    {
+    	var hours=$('#hours').html();
+    	var minutes=$('#minutes').html();
+    	var seconds=$('#seconds').html();
+      	$('#f_hours').html(hours);
+    	$('#f_minutes').html(minutes);
+    	$('#f_seconds').html(seconds);
+        
+        $('#finishModal').modal({backdrop: 'static', keyboard: false});
+
+    }
+</script>
+{%endblock%}
+</html>

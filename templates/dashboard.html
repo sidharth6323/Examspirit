@@ -1,0 +1,87 @@
+<html>
+{%extends 'base.html' %}
+{%load staticfiles %}
+{%block content %}
+
+<div class="col-sm-10">
+<div style="margin-left:-1%">
+<div style="width:100%;background:#ffffff;height:10%;border-bottom:1px #cccccc solid;margin-top:-1%;">
+	<div style="font-size:20px;padding-left:25px;padding-top:20px">Dashboard</div>
+</div>
+
+<div class="tabs">
+ <ul class="nav nav-tabs" role="tablist" style="background:#ffffff;">
+    <li role="presentation" class="active" style="background:#ffffff;"><a href="#ongoing" aria-controls="ongoing" role="tab" data-toggle="tab">TODAY</a></li>
+    <li role="presentation"><a href="#upcoming" aria-controls="upcoming" role="tab" data-toggle="tab">UPCOMING</a></li>
+    <li role="presentation"><a href="#previous" aria-controls="previous" role="tab" data-toggle="tab">PREVIOUS</a></li>
+  </ul>
+  <div class="tab-content">
+  <div role="tabpanel" class="tab-pane fade in active" id="ongoing" style="background:#f8f8f8;height:57%;">
+  <br><br>
+<div class="row" style="margin-left:20px;">
+ 	{% for i in ongoing %}
+<div class="col-sm-3" style="width:200px;border:1px solid #9bc9f7;margin-left:30px;height:200px;background:#ffffff;">
+<div style="width:118%;margin-top:-5%;background:rgba(32,80,129,0.1);border-bottom:1px solid #cccccc;height:19%;margin-left:-9%;"><p style="margin-left:28%;margin-top:5%;padding-top:3%;font-size:20px;">{{i.test.t_name}}</p></div>
+<div style="margin-left:28%;padding-top:8%;font-size:20px;">{{i.p_name}}</div>
+<span style="margin-left:33%;margin-top:1%;font-size:13px;color:#a4a4a5;">starts at :</span>
+<div style="margin-left:25%;padding-top:1%;font-size:20px;">{{i.s_time}}</div>
+<div><span style="margin-left:20%;margin-top:1%;font-size:13px;color:#a4a4a5;">duration :{{i.duration}} </span></div> <br> 
+<a href="/{{i.test}}/inst/{{i.p_id}}/" style="margin-left:40px;"><button style="margin-top:-7%;" class="btn btn-default">START NOW</button></a>
+</div>
+{%endfor%}
+</div>
+  </div>
+  <div role="tabpanel" class="tab-pane fade" id="upcoming">
+        <br><br>
+  <div class="row" style="margin-left:20px;">
+    {% for i in upcoming %}
+  <div class="col-sm-3" style="width:200px;border:1px solid #9bc9f7;margin-left:30px;height:200px;background:#ffffff;">
+  <div style="width:118%;margin-top:-5%;background:rgba(32,80,129,0.1);border-bottom:1px solid #cccccc;height:19%;margin-left:-9%;"><p style="margin-left:28%;margin-top:5%;padding-top:3%;font-size:20px;">{{i.test.t_name}}</p></div>
+  <div style="margin-left:28%;padding-top:8%;font-size:20px;">{{i.p_name}}</div>
+  <span style="margin-left:33%;margin-top:1%;font-size:13px;color:#a4a4a5;">starts at :</span>
+  <div style="margin-left:25%;padding-top:1%;font-size:20px;">{{i.s_time}}</div>
+  <div><span style="margin-left:20%;margin-top:1%;font-size:13px;color:#a4a4a5;">duration :{{i.duration}} </span></div> <br> 
+  <p style="margin-top:-5%;font-size:18px;margin-left:35px;">{{i.date}}</p>
+  </div>
+  {%endfor%}
+  </div>    
+</div>
+  <div role="tabpanel" class="tab-pane fade" id="previous">
+         <br><br>
+  <div class="row" style="margin-left:20px;">
+    {% for i in previous %}
+  <div class="col-sm-3" style="width:200px;border:1px solid #9bc9f7;margin-left:30px;height:200px;background:#ffffff;">
+  <div style="width:118%;margin-top:-5%;background:rgba(32,80,129,0.1);border-bottom:1px solid #cccccc;height:19%;margin-left:-9%;"><p style="margin-left:28%;margin-top:5%;padding-top:3%;font-size:20px;">{{i.test.t_name}}</p></div>
+  <div style="margin-left:28%;padding-top:8%;font-size:20px;">{{i.p_name}}</div>
+  <span style="margin-left:33%;margin-top:1%;font-size:13px;color:#a4a4a5;">starts at :</span>
+  <div style="margin-left:25%;padding-top:1%;font-size:20px;">{{i.s_time}}</div>
+  <div><span style="margin-left:20%;margin-top:1%;font-size:13px;color:#a4a4a5;">duration :{{i.duration}} </span></div> <br> 
+  <p style="margin-top:-5%;font-size:18px;margin-left:35px;">{{i.date}}</p>
+  </div>
+  {%endfor%}
+  </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-sm-2">
+<div class="content" style="background:#f8f8f8;height:73.5%;margin-top:-6%;width:118%;margin-left:-15%;border:1px solid #cccccc;">
+<div style="width:100%;margin-top:25px;margin-left:20px;">
+ <div style="width:100%;font-size:17px">Examination Type</div><br>
+ {%for i in tests%}
+ <a href="#{{i}}"><div class="bot_bt" style="width:90%;height:40px;padding-top:10px;padding-left:10px;">{{i}}</div></a>
+ {%endfor%}
+</div>
+<div style="width:100%;margin-top:25px;margin-left:20px;">
+ <div style="width:100%;font-size:17px">Tests Taken</div><br>
+ <a href="#"><div class="top_bt" style="width:90%;height:40px;padding-top:10px;padding-left:10px;">TEST 1</div></a>
+ <a href="#"><div class="top_bt" style="width:90%;height:40px;padding-top:10px;padding-left:10px;">TEST 2</div></a>
+ <a href="#"><div class="top_bt" style="width:90%;height:40px;padding-top:10px;padding-left:10px;">TEST 3</div></a>
+</div>
+ </div>
+
+</div>
+</div>
+{%endblock%}
+</html>

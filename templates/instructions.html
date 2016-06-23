@@ -1,0 +1,58 @@
+<html>
+{%extends 'base.html' %}
+{% load staticfiles %}
+{%block content %}
+<style>
+	.header
+	{
+		width:100%;
+		height:100px;
+		background: #fcfcfc;
+		border-bottom: 2px solid #d8d8d8;
+		border-top: 0px solid #d8d8d8;
+		margin-top: -22px;
+	}
+	.inst
+	{
+		width:100%;
+		height:100%;
+		background: url("{% static 'img/instback.jpeg' %}");
+		border-bottom: 2px solid #d8d8d8;
+		
+	}
+	.body
+	{
+		background: url("{% static 'img/instback.jpeg' %}");
+	}
+</style>
+<div class="header">
+	<div class="row">
+		<div class="col-sm-10">
+			<br>
+			<span style="font-size:20px;padding-left:54%">{{user_m.test}} : {{paper_l.p_name|upper}} 
+			</span>
+			<br>
+			<span style="font-size:16px;padding-left:55%;padding-top:5%;">INSTRUCTIONS</span>
+		</div>
+		<div class="col-sm-2" style="padding-left:4%">
+			<br>
+			Date : {{paper_l.date}}
+			<br>
+			Time : {{paper_l.s_time}}
+			<br>
+			Duration : {{paper_l.duration}}	
+		</div>
+	</div>
+</div>
+<div class="inst">
+<br>
+<div style="width:80%;padding-left:100px;padding-top:10px;">
+{{paper_l.instructions |safe | linebreaks }}
+<br><br>
+<a href="/{{paper_l.test}}/paper/{{paper_l.p_id}}/">
+<button class="btn btn-primary" style="margin-left:900px;">Proceed to take test >></button>
+</a>
+</div>
+</div>
+{%endblock%}
+</html>

@@ -1,0 +1,40 @@
+<html>
+{%extends 'base.html' %}
+{%load staticfiles %}
+{%block content %}
+
+<div ng-app="myApp" ng-controller="newCtrl">
+<div style="margin-top:200px;margin-left:35%;font-size:40px;">TEST HAS EXPIRED!</div>
+<div style="margin-top:20px;margin-left:32%;font-size:20px;">You will be redirected to dashboard within {$sec$} seconds</div>
+<a href="/dashboard/"><button class="btn btn-primary" style="margin-top:20px;margin-left:42%;width:200px;height:60px;">JUMP TO DASHBOARD</button></a>
+</div>
+<br><br><br><br><br>
+<script>
+
+	var app=angular.module('myApp',[]);
+	app.controller('newCtrl',function($scope,$http,$interval) {
+			
+			$scope.sec=20;
+			var r_sec=function(){
+				if($scope.sec==0)
+				{
+					window.location="/dashboard/"
+				}
+				$scope.sec=$scope.sec-1;
+			}
+			$interval(r_sec,1000);
+		}
+	);
+var my_app = angular.module('myApp').config(function($interpolateProvider) {
+    $interpolateProvider.startSymbol('{$');
+    $interpolateProvider.endSymbol('$}');
+});
+
+app.config(['$httpProvider', function($httpProvider) {
+    $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+    $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+}]);
+
+</script>
+{%endblock%}
+</html>
