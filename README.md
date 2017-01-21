@@ -16,7 +16,8 @@ Pillow==2.9.0<br><br>
 
 ### Steps to access admin :<br>
 
-1. Open localhost:8000/admin/ in web browser.
+1. Open incognito mode in the browser
+1. Open localhost:8000/admin/ in incognito.
 2. Enter username : Examspirit, password : exam12345
 
 
