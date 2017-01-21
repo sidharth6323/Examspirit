@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import paper,result,question,test,e_user,section
+from models import paper,result,question,test,e_user,section,saved_paper
 from django import template
 # Register your models here.
 
@@ -10,6 +10,10 @@ class paperAdmin(admin.ModelAdmin):
 
 @admin.register(question)
 class questionAdmin(admin.ModelAdmin):
+	pass
+
+@admin.register(saved_paper)
+class saved_paperAdmin(admin.ModelAdmin):
 	pass
 
 @admin.register(test)

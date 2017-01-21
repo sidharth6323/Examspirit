@@ -4041,10 +4041,8 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   color: #fff;
   cursor: default;
   background: #4D9CDF;
-  opacity: 0.8;
-  transform: rotate(2deg);
+  opacity: 0.9;
   transition: all .3s ease-in-out; 
-  border-radius:6px;
   border: 1px solid #ddd;
   border-bottom-color: transparent;
 }

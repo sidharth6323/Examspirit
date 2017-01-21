@@ -1,0 +1,64 @@
+<html>
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+<div class="col-sm-12">
+<div style="margin-left:-1%">
+<div style="width:102%;background:#ffffff;height:10%;border-bottom:1px #cccccc solid;margin-top:-1%;">
+	<div style="font-size:20px;padding-left:25px;padding-top:20px">Result Summary</div>
+</div>
+</div><br>
+<div class="row">
+	<div class="col-sm-5 col-sm-offset-5">
+	<p><h3>{{paper.test.t_name}} - {{paper.p_name}}</h3></p>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-5 col-sm-offset-5">
+	<medium>Ending date - {{paper.e_date}}</medium>
+	</div>
+</div>
+<br><br><br><br>
+<div class="row">
+	<div class="col-sm-3 col-sm-offset-2">
+		<div style="box-shadow: 2px 3px 1px #cccccc;width:300px;height:100px;background:#ffffff;">
+		<img src="{%static 'img/answered.jpg' %}" width="130" height="100">
+		<p style="display:inline-block;margin-top:-155%;">
+			<h4 style="display:inline-block;">&nbsp&nbsp Answered : {{result.answered}}</h4>
+		</p>
+		</div>
+	</div>
+	<div class="col-sm-3">
+		<div style="box-shadow: 2px 3px 1px #cccccc;width:300px;height:100px;background:#ffffff;">
+		<img src="{%static 'img/correct.jpg' %}" width="130" height="100">
+		<p style="display:inline-block;margin-top:-155%;">
+			<h4 style="display:inline-block;">&nbsp&nbsp Correct : {{result.correct}}</h4>
+		</p>
+		</div>
+	</div>
+	<div class="col-sm-3">
+		<div style="box-shadow: 2px 3px 1px #cccccc;width:300px;height:100px;background:#ffffff;">
+		<img src="{%static 'img/unanswered.jpg' %}" width="130" height="100">
+		<p style="display:inline-block;margin-top:-155%;">
+			<h4 style="display:inline-block;">&nbsp&nbsp Unanswered : {{result.unanswered}}</h4>
+		</p>
+		</div>
+	</div>
+</div><br><br>
+<div class="row">
+<div class="col-sm-5 col-sm-offset-5">
+<h3 style="margin-left:-5%">Total Marks Obtained : {{result.marks}}</h3>
+</div>
+</div>
+<div class="row">
+
+<div class="col-sm-5 col-sm-offset-5">
+<a href="/rank/{{paper.p_id}}/">
+<button class="btn btn-primary" style="margin-left:10%;height:40px">Check rank</button>
+</div>
+</div>
+<br><br>
+</div>
+{%endblock%}
+</html>

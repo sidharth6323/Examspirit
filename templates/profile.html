@@ -1,0 +1,146 @@
+<html>
+{%extends 'base.html' %}
+{%load staticfiles %}
+{%block content %}
+<style>
+#sidebar li
+{
+	padding-bottom: 5%;
+	padding-top: 5%;
+
+}
+#sidebar a:hover
+{
+	display: block;
+	background:#f4f4f4;
+	text-decoration: none;
+	transition: 1s all;
+}
+</style>
+<div class="col-sm-12">
+<div style="margin-left:-1%">
+<div style="width:102%;background:#ffffff;height:10%;border-bottom:1px #cccccc solid;margin-top:-1%;">
+	<div style="font-size:20px;padding-left:25px;padding-top:20px">My profile</div>
+</div>
+</div>
+</div>
+<div class="col-sm-2" id="sidebar" style="width:13%;background:#f4f4f4;padding-top:4%;padding-left:0.5%;z-index:100;border-right:1px solid #cccccc;height:100%;margin-top:0%;">
+	<ul style="width: 100%;font-size:17px;list-style-type:none;text-align:center;">
+	<a href="#" class="basic_btn"><li>Basic Info</li></a>
+	<a href="#" class="test_btn"><li> Tests/Results</li></a>
+	<a href="#" class="sec_btn"><li> Security</li></a>
+	</ul>
+</div>
+<div class="col-sm-10">
+<div class="basic" style="margin-top:1.5%;">
+	<div class="row">
+		<div class="col-sm-5 col-sm-offset-4"><h3>Edit your Basic Info</h3></div>
+	</div>
+	<br><br><br>
+	<div class="row">
+		<div class="col-sm-10 col-sm-offset-1">
+		<form method="post" action="/edit_basic/">
+		{% csrf_token %}	
+			<div class="row" style="margin-left:5%;display:inline-block">
+			<label for="usr">Name:</label>
+			  <input name="name" type="text" value="{{e_user.f_name}}" class="form-control"  id="usr">
+			</div>
+		<br><br>
+			<div class="form-group" style="margin-left:5.2%;display:inline-block">
+			<label for="usr">Email:</label>
+			  <input type="email" name="email" value="{{e_user.email}}"class="form-control"  id="usr">
+			</div>
+		<br>
+			<div class="form-group" style="margin-left:5%;display:inline-block">
+			<label for="usr">Mobile :</label>
+			  <input type="number" name="mobile" value="{{e_user.mobile}}" class="form-control"  id="usr">
+			</div>
+		<br>
+			<div class="form-group" style="margin-left:5%;display:inline-block">
+			<label for="usr">DOB(YYYY-MM-DD) :</label>
+			  <input type="date" name="dob" value="{{e_user.dob|date:'Y-m-d'}}" class="form-control"  id="usr">
+			</div>
+		<br><br>
+		<input type="submit" class="btn btn-primary" style="margin-left:25%;" value="Save Changes">
+
+		</form>
+		</div>
+	</div>
+</div>
+
+<div class="test" style="display:none;margin-top:1.5%;">
+	<div class="row">
+		<div class="col-sm-5 col-sm-offset-4"><h3>TESTS GIVEN</h3></div>
+	</div>
+	<br><br><br>
+	{% if not t_given %}
+   <div style="background:#ffffff;height:50px;padding-top:1.2%;padding-left:3%;box-shadow: 2px 2px 1px #cccccc;border-top:1px solid #cccccc;width:30%;border-left:1px solid #cccccc;margin-left:10%;">You have not given any tests yet!</div>
+   {%endif%}
+	{% for i in t_given %}
+<div class="col-sm-3" style="width:200px;border-left:1px solid #cccccc;box-shadow: 2px 5px 1px #cccccc;margin-left:30px;background:#ffffff;">
+<img src="{{ MEDIA_URL }}{{ i.image.url }}" height="100" width="116.5%" style="margin-left:-8%">
+<div style="width:118%;margin-top:-5%;background:#E8E8E8;border-bottom:1px solid #cccccc;height:7%;margin-left:-9%;">
+<p style="margin-top:5%;padding-top:3%;font-size:20px;text-align: center;">{{i.test.t_name}}</p></div>
+<div style="padding-top:5%;font-size:20px;text-align: center;" class="row">{{i.p_name|slice:"15"}}</div>
+<div class="row" style="text-align: center;">
+<span style="font-size:13px;color:#a4a4a5;">ended on :</span></div>
+<div style="margin-left:25%;padding-top:1%;font-size:20px;">{{i.e_date}}</div>
+<div><span style="margin-left:20%;margin-top:1%;font-size:13px;color:#a4a4a5;">duration :{{i.duration}} </span></div> <br> 
+<a href="/result/{{i.p_id}}/" style="margin-left:10%;"><button style="margin-top:-7%;" class="btn btn-default">VIEW RESULTS</button></a><br><br>
+</div>
+{%endfor%}
+</div>
+
+<div class="sec" style="display:none;margin-top:1.5%;">
+	<div class="row">
+		<div class="col-sm-5 col-sm-offset-4"><h3>Edit your Security Info</h3></div>
+	</div>
+	<br><br><br>
+	<div class="row">
+		<div class="col-sm-10 col-sm-offset-1">
+		<form method="post" action="/edit_sec/">
+		{% csrf_token %}	
+			<div class="form-group" style="margin-left:7.5%;display:inline-block">
+			<label for="usr">Username :</label>
+			  <input type="text" name="username" value="{{e_user}}" class="form-control"  id="usr">
+			</div>
+		<br>
+			<div class="form-group" style="margin-left:7.5%;display:inline-block">
+			<label for="usr">Old Password:</label>
+			  <input type="password" name="o_password" class="form-control"  id="usr">
+			</div>
+		<br>
+			<div class="form-group" style="margin-left:7.5%;display:inline-block">
+			<label for="usr">New Password:</label>
+			  <input type="password" name="n_password" class="form-control"  id="usr">
+			</div>
+		<br>
+		<br><br>
+		<button class="btn btn-primary" style="margin-left:25%;">Save Changes</button>
+		</form>
+		</div>
+	</div>
+</div>
+</div>
+<script>
+	$(".basic_btn").click(function(){
+    $(".basic").show("slow");
+    $(".test").hide("slow");
+    $(".sec").hide("slow");
+});
+
+	$(".test_btn").click(function(){
+    $(".basic").hide("slow");
+    $(".test").show("slow");
+    $(".sec").hide("slow");
+});
+
+	$(".sec_btn").click(function(){
+    $(".basic").hide("slow");
+    $(".test").hide("slow");
+    $(".sec").show("slow");
+});
+</script>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+{%endblock%}
+</html>

@@ -4,12 +4,15 @@
 {%block content %}
 
 <div ng-app="myApp" ng-controller="newCtrl">
-<div style="margin-top:200px;margin-left:28%;font-size:40px;">THANKS FOR GIVING THE TEST!</div>
-
-<div style="margin-top:20px;margin-left:35%;font-size:20px;">You will be redirected to dashboard within {$sec$} seconds</div>
-<a href="/result/{{paper_l.p_id}}/"><button class="btn btn-primary" style="margin-top:20px;margin-left:45%;width:200px;height:60px;">CHECK RESULTS >>	</button></a>
-<br>
-<a href="/dashboard/"><button class="btn btn-primary" style="margin-top:20px;margin-left:45%;width:200px;height:60px;">JUMP TO DASHBOARD</button></a>
+{% if not rank %}
+<div style="margin-top:200px;margin-left:35%;font-size:40px;">RANK not generated</div>
+<div style="margin-top:20px;margin-left:32%;font-size:20px;">You will be redirected to dashboard within {$sec$} seconds</div>
+<a href="/dashboard/"><button class="btn btn-primary" style="margin-top:20px;margin-left:42%;width:200px;height:60px;">JUMP TO DASHBOARD</button></a>
+{% endif %}
+{% if rank %}
+<div style="margin-top:200px;margin-left:25%;font-size:40px;">Your Rank among {{user_given}} candidates is :</div>
+<div style="margin-top:20px;margin-left:45%;font-size:20px;"><h1>{{rank}}</h1></div>
+{%endif%}
 </div>
 <br><br><br><br><br>
 <script>

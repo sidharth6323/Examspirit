@@ -27,9 +27,10 @@
 }
 #ques
 {
-		background-color: #f8f8f8;
+		background-color: #ffffff;
 		width:95%;
 		margin-left:15px;
+		box-shadow: 0px 0px 15px #cccccc;
 }
 #sidebar
 {   
@@ -117,12 +118,51 @@
 		</div>
 		
 			{% for p in t %}
+			{% if paper.sections.all %}
 			{% if not forloop.first %}
 			{% for i,j in p.items %}
-			
 			<br>
 			<div id="ul{{j.4}}" data-title="{{j.5}}">
-			<ul style="list-style-type:none;border:1px solid #afafaf;" id="ques">
+			<ul style="list-style-type:none;" id="ques">
+			<br>
+				<span>Q {{j.4|safe}})  {{i|safe}}<br></span>
+				<li>
+					<fieldset id="q{{j.4}}">
+						<div class="row" style="padding-left:30px;">
+						<div class="col-sm-12">
+							<div class="radio">
+							<label><input ng-click="m_bubble({{j.4}})" type="radio" name="{{j.4}}" id="check{{j.4}}1">{{j.0 |wrap_me:"75"|safe}}</label>
+							</div>
+							<div class="radio">
+							<label><input ng-click="m_bubble({{j.4}})" type="radio" id="check{{j.4}}2" name="{{j.4}}">{{j.1 |wrap_me:"75"|safe}}</label>
+							</div>
+							<div class="radio">
+							<label><input ng-click="m_bubble({{j.4}})" type="radio" name="{{j.4}}" id="check{{j.4}}3">{{j.2|wrap_me:"75"|safe}}</label>
+							</div>
+							<div class="radio">
+							<label><input ng-click="m_bubble({{j.4}})" type="radio" name="{{j.4}}" id="check{{j.4}}4">{{j.3|wordwrap:"75"|safe}}</label>
+							</div>
+						</div>
+						</div>
+
+					</fieldset>
+
+				</li>
+					<br>
+					<button class="btn btn-default" style="margin-left:600px;" ng-click="skip({{j.4}})">Skip</button><br><br>
+			</ul>
+			</div>
+			<br>
+
+			{%endfor%}
+			{%endif%}
+			{%endif%}
+			<!-- questions without section -->
+			{% if not paper.sections.all %}
+			{% for i,j in p.items %}
+			<br>
+			<div id="ul{{j.4}}" data-title="{{j.5}}">
+			<ul style="list-style-type:none;" id="ques">
 			<br>
 				<span>Q {{j.4|safe}})  {{i|safe}}<br></span>
 				<li>
@@ -270,11 +310,23 @@
 </div><!-- end of angular -->
 </div>
 <script>
+	var flag=1;
 	var app=angular.module('myApp',[]);
-	app.controller('newCtrl',function($scope,$http) {
-			$scope.answered=0;
-			$scope.unanswered={{noq|length}};
-			$scope.skipped=0;
+	app.controller('newCtrl',function($scope,$http,$interval) {
+			{% if paper_s %}
+				$scope.answered_arr={{answered}};
+				$scope.answered={{answered|length}};
+				$scope.skipped_arr = {{skipped}};
+				$scope.skipped = {{skipped|length}};
+				$scope.unanswered = {{unanswered}};
+			{%else%}
+				$scope.answered=0;
+				$scope.unanswered={{noq|length}};
+				$scope.skipped=0;
+				$scope.answered_arr=[];
+				$scope.skipped_arr=[];
+			{%endif%}
+			$interval(function(){$scope.save_res();}, 2000);
 			$scope.active_p=1;
 			$scope.count=0;
 			$scope.toggle_div=function(page)
@@ -318,10 +370,13 @@
 				if(bubble.style.background=='rgba(112, 115, 173, 0.298039)')
 				{
 					$scope.skipped=$scope.skipped-1;
+					var index = $scope.skipped_arr.indexOf(ques);
+					$scope.skipped_arr.splice(index, 1);
 				}
 				bubble.style.background = 'rgba(105, 198, 122, 0.3)';
 				$scope.answered=$scope.answered+1;
 				$scope.unanswered=$scope.unanswered-1;
+				$scope.answered_arr.push(ques)
 				console.log(bubble.style.background);
 			}
 			$scope.skip=function(ques)
@@ -331,6 +386,8 @@
 				if(document.getElementById('check'+ques+'1').checked==true || document.getElementById('check'+ques+'2').checked==true || document.getElementById('check'+ques+'3').checked==true || document.getElementById('check'+ques+'4').checked==true)
 				{
 					$scope.answered=$scope.answered-1;
+					var index = $scope.answered_arr.indexOf(ques);
+					$scope.answered_arr.splice(index, 1);
 				}
 				else
 				{
@@ -341,6 +398,7 @@
 				document.getElementById('check'+ques+'3').checked = false;
 				document.getElementById('check'+ques+'4').checked = false;
 				$scope.skipped=$scope.skipped+1;
+				$scope.skipped_arr.push(ques);
 			}
 			$scope.show_sec=function(sec)
 			{
@@ -348,8 +406,55 @@
 				console.log(div.getAttribute("data-title"))
 				$scope.active_p=div.getAttribute("data-title");
 			}
+			$scope.save_res =function()
+			{
+				flag=0;
+				var a={};
+				var ans;
+				for(var i=1;i<={{noq|length}};i++)
+				{
+						var q=document.getElementById("ul"+i);
+						var c1=document.getElementById("check"+i+"1");
+						var c2=document.getElementById("check"+i+"2");
+						var c3=document.getElementById("check"+i+"3");
+						var c4=document.getElementById("check"+i+"4");
+						if(c1.checked)
+								ans=c1.id;
+						else if(c2.checked)
+							ans=c2.id;
+						else if(c3.checked)
+							ans=c3.id;
+						else if(c4.checked)
+							ans=c4.id;
+						else
+							ans="none"
+						
+						a[q.getAttribute("data-title")]=ans;
+							
+				}
+				//console.log(a);
+				hours = document.getElementById("hours").innerHTML;
+				minutes = document.getElementById("minutes").innerHTML;
+				seconds = document.getElementById("seconds").innerHTML;
+				console.log($scope.unanswered);
+ 				$http({
+				    method: 'POST',
+				    url: '/save_paper/{{paper_l.p_id}}/',
+				    data: {
+				    		p_id:"{{paper_l.p_id}}",
+				    		t_left:hours+":"+minutes+":"+seconds,
+				        	t_res:a,
+				        	skipped:$scope.skipped_arr,
+				        	answered:$scope.answered_arr,
+				    		unanswered:$scope.unanswered,
+				             csrfmiddlewaretoken: '{{ csrf_token }}',
+				        },
+				    headers: {'Content-Type': 'application/json'}
+				});
+			}
 			$scope.post_res=function()
 			{
+				flag=0;
 				var a={};
 				var ans;
 				for(var i=1;i<={{noq|length}};i++)
@@ -384,7 +489,7 @@
 				        },
 				    headers: {'Content-Type': 'application/json'}
 				});
-				window.location="/finish_t/";
+				setTimeout(function(){window.location="/finish_t/{{paper_l.p_id}}/"},3000);
 
 			}
 		}
@@ -403,17 +508,53 @@ app.config(['$httpProvider', function($httpProvider) {
 <script type="text/javascript">  
     $('document').ready(function() {
         'use strict';
-        
-    	$('.countdown').final_countdown({
-            'start': 0,
-            'end': 140+{{duration.seconds}},
-            'now': 140        
-        }, function() {
-        		document.getElementById("paper").style.visibility="hidden";
+        console.log("{{paper_s}}")
+        	{% if paper_s %}
+				console.log("paper exists");
+				{%for i in answered %}
+				document.getElementById('bubble'+"{{i}}").style.background = 'rgba(105, 198, 122, 0.3)';
+			{%endfor%}
+			{%for i in skipped %}
+				document.getElementById('bubble'+"{{i}}").style.background = 'rgba(112, 115, 173, 0.3)';
+			{%endfor%}
+				$('.countdown').final_countdown({
+            			'start': 0,
+    		        	'end': 140+{{paper_s.t_left.seconds}},
+            			'now': 140        
+        			}, function() {
+        			document.getElementById("paper").style.visibility="hidden";
         		
-        		$('#t_finishModal').modal({backdrop: 'static', keyboard: false});
+        			$('#t_finishModal').modal({backdrop: 'static', keyboard: false});
                 
-        });
+        		});
+        		{% for i,j in saved_ans.items %}
+        		console.log("{{i}}");
+        		console.log("{{j}}");
+        		if("{{j}}"!="none")
+        		{
+					var ques = $('div[data-title="{{i}}"]');
+					$(ques).find("input[id='{{j}}']").prop("checked","true");
+        		}
+        		{%endfor%}
+        		//console.log(saved_data);
+        		//console.log(JSON.parse(saved_data));
+			{% else %}
+				console.log("paper dosent exist")
+				$('.countdown').final_countdown({
+            			'start': 0,
+    		        	'end': 140+{{duration.seconds}},
+            			'now': 140        
+        			}, function() {
+        			document.getElementById("paper").style.visibility="hidden";
+        		
+        			$('#t_finishModal').modal({backdrop: 'static', keyboard: false});
+                
+        		});
+			{%endif%}
+      $(window).on('beforeunload',function(){
+      	if(flag==1)
+    	{return "are you sure you want to leave?";}
+    });
 
     });
     function scrollto(id){
